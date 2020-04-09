@@ -37,7 +37,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
 
         recyclerView.setHasFixedSize(true);
-        MyDecoration decoration = new MyDecoration(spanCount);
+        int spacing = DensityUtil.dip2px(this, 8);
+        MyDecoration decoration = new MyDecoration(spanCount, spacing);
         GridSpacingItemDecoration itemDecoration = new GridSpacingItemDecoration(spanCount, 20, true);
 //        recyclerView.addItemDecoration(itemDecoration);
         recyclerView.addItemDecoration(decoration);
@@ -50,9 +51,11 @@ public class MainActivity extends AppCompatActivity {
 
     private class MyDecoration extends RecyclerView.ItemDecoration {
         int spanCount;
+        int spacing;
 
-        public MyDecoration(int spanCount) {
+        public MyDecoration(int spanCount, int spacing) {
             this.spanCount = spanCount;
+            this.spacing = spacing;
         }
 
         @Override
@@ -65,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
 //            } else {
 //                right = space;
 //            }
-            int space = DensityUtil.dip2px(parent.getContext(), 10);
             int position = parent.getChildAdapterPosition(view);
             //spanCount为2时，余数是0或者1
             int column = position % spanCount;
@@ -73,36 +75,36 @@ public class MainActivity extends AppCompatActivity {
             //余数为0，表示所有位于左边那一列的itemView，它们的left是right的2倍，如left=10，right=5
             //余数为1，表示所有位于右边那一列的itemView，他们的right是left的2倍，如right=10，left=5
             //如此一来两列中间的间隙大小就和左边以及右边的一致了
-//            outRect.left = space - column * space / spanCount;
-//            outRect.right = (column + 1) * space / spanCount;
+//            outRect.left = spacing - column * spacing / spanCount;
+//            outRect.right = (column + 1) * spacing / spanCount;
             //和上面的写法等同 更直白
 //            if (column == 0) {
-//                outRect.left = space;
-//                outRect.right = space / 2;
+//                outRect.left = spacing;
+//                outRect.right = spacing / 2;
 //            } else {
-//                outRect.left = space / 2;
-//                outRect.right = space;
+//                outRect.left = spacing / 2;
+//                outRect.right = spacing;
 //            }
 
             //通用的，不管spanCount是多少（大于等于2）
             if (column == 0) {
                 //最小的余数 最左边的一列
-                outRect.left = space;
-                outRect.right = space / 2;
+                outRect.left = spacing;
+                outRect.right = spacing / 2;
             } else if (column == spanCount - 1) {
                 //最大的余数 最右边的一列
-                outRect.left = space / 2;
-                outRect.right = space;
+                outRect.left = spacing / 2;
+                outRect.right = spacing;
             } else {
                 //中间的列
-                outRect.left = space / 2;
-                outRect.right = space / 2;
+                outRect.left = spacing / 2;
+                outRect.right = spacing / 2;
             }
 
             if (position < spanCount) {
-                outRect.top = space;
+                outRect.top = spacing;
             }
-            outRect.bottom = space;
+            outRect.bottom = spacing;
         }
     }
 }
